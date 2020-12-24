@@ -1,10 +1,13 @@
 import './App.css';
+import Recipe from './Recipe';
 import React, {useEffect, useState} from "react";
 
 const App = () => {
 
   const ID = process.env.REACT_APP_APP_ID;
   const KEY = process.env.REACT_APP_APP_KEY;
+
+  const [recipes, setRecipes] = useState([]); 
   
   //useeffect is just a function that is going to run every time the page loads
   useEffect( () => {
@@ -17,7 +20,9 @@ const App = () => {
   
     const data = await response.json();
 
-    console.log(data);
+    //console.log(data); //if we wanted to get the "hits" attribute then we would just do data.hits
+    setRecipes(data.hits);
+    console.log(data.hits);
   };
 
   return(
@@ -28,6 +33,13 @@ const App = () => {
           Search
         </button>
       </form>
+      {recipes.map(recipe => (
+        <Recipe 
+          title ={recipe.recipe.label} 
+          calories={recipe.recipe.calories} 
+          image = {recipe.recipe.image}
+        />
+      ))}
     </div>
   );
 }
